@@ -30,6 +30,10 @@ run() {
 dumper 8
 for size in 2-4-8 1-2-4-8 1--8; do
   for order in big-endian native; do
+    # Native fixtures hold little-endian output; DataRepTest skips them on big-endian hosts.
+    if [ "$order" = native ] && [ "$(printf I | od -An -to2 | tr -d ' ')" != 000111 ]; then
+      continue
+    fi
     conf="include \"cobol2002.conf\"\nbinary-size: $size\nbinary-byteorder: $order\n"
     run "dump-binary-$size-$order" BINARY numeric-dump "$conf"
     run "display-binary-$size-$order" BINARY numeric-display "$conf"

@@ -38,8 +38,9 @@ public final class NumericField {
         if (!signed && newValue < 0) {
             throw new IllegalArgumentException(name + " is unsigned: " + newValue);
         }
-        if (Math.abs(newValue) >= pow10(digits)) {
-            throw new IllegalArgumentException(name + " cannot hold " + digits + "+ digit value " + newValue);
+        long limit = pow10(digits);
+        if (newValue >= limit || newValue <= -limit) {
+            throw new IllegalArgumentException(name + " cannot hold " + newValue + " in " + digits + " digits");
         }
         value = newValue;
     }
